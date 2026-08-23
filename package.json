@@ -1,0 +1,27 @@
+{
+  "name": "git-github-book",
+  "version": "1.0.0",
+  "description": "> *\"Every expert was once a beginner. Every professional was once an amateur.\"*",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MQHassan/git-github-book.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/MQHassan/git-github-book/issues"
+  },
+  "homepage": "https://github.com/MQHassan/git-github-book#readme",
+  "devDependencies": {
+    "md-to-pdf": "^5.2.5"
+  },
+  "allowScripts": {
+    "puppeteer@25.8.0": true
+  }
+}
