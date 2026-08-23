@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git & GitHub — From Zero to Professional</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #6C63FF;
+      --secondary: #FF6584;
+      --accent: #43E97B;
+      --dark: #1E2235;
+      --darker: #181C2E;
+      --card: #243050;
+      --text: #E8E8F0;
+      --text-muted: #9090A8;
+      --white: #FFFFFF;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* Navigation */
+    nav {
+      background: var(--darker);
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(108,99,255,0.3);
+    }
+    nav .logo {
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 28px;
+    }
+    nav ul li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    nav ul li a:hover { color: var(--primary); }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, var(--darker) 0%, #1e1e4a 50%, var(--darker) 100%);
+      padding: 100px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(108,99,255,0.12) 0%, transparent 70%);
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(108,99,255,0.2);
+      border: 1px solid rgba(108,99,255,0.4);
+      color: var(--primary);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      margin-bottom: 24px;
+      letter-spacing: 0.05em;
+    }
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--white), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero h2 {
+      font-size: 20px;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+    .hero-quote {
+      font-style: italic;
+      color: var(--accent);
+      font-size: 16px;
+      margin-bottom: 40px;
+      opacity: 0.9;
+    }
+    .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #8B80FF);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(108,99,255,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(108,99,255,0.5); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 14px 32px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 16px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* Stats bar */
+    .stats-bar {
+      background: var(--darker);
+      padding: 28px 40px;
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+    /* Sections */
+    .section-inner { max-width: 1100px; margin: 0 auto; padding: 80px 40px; }
+    .section-alt { background: rgba(255,255,255,0.02); }
+
+    .section-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--white);
+    }
+    .section-sub {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+      max-width: 600px;
+    }
+
+    /* Chapter cards — clickable */
+    .chapters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .chapter-card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 22px 24px;
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      color: inherit;
+    }
+    .chapter-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(108,99,255,0.5);
+      box-shadow: 0 8px 30px rgba(108,99,255,0.15);
+    }
+    .chapter-num {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .chapter-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .chapter-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .level-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .level-beginner { background: rgba(67,233,123,0.15); color: #43E97B; }
+    .level-intermediate { background: rgba(255,193,7,0.15); color: #FFC107; }
+    .level-advanced { background: rgba(255,101,132,0.15); color: #FF6584; }
+    .level-project { background: rgba(108,99,255,0.15); color: #6C63FF; }
+
+    /* Features */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 28px;
+      border: 1px solid rgba(255,255,255,0.06);
+      text-align: center;
+    }
+    .feature-icon { font-size: 36px; margin-bottom: 14px; }
+    .feature-title { font-size: 16px; font-weight: 600; color: var(--white); margin-bottom: 8px; }
+    .feature-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+    /* Annex cards */
+    .annex-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .annex-card {
+      background: linear-gradient(135deg, var(--card), rgba(108,99,255,0.1));
+      border-radius: 14px;
+      padding: 24px;
+      border: 1px solid rgba(108,99,255,0.2);
+      transition: transform 0.2s;
+      text-decoration: none;
+      display: block;
+      color: inherit;
+    }
+    .annex-card:hover { transform: translateY(-3px); }
+    .annex-letter {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .annex-title { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 6px; }
+    .annex-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Author section */
+    .author-section {
+      background: linear-gradient(135deg, rgba(108,99,255,0.1), rgba(255,101,132,0.1));
+      border: 1px solid rgba(108,99,255,0.2);
+      border-radius: 20px;
+      padding: 48px;
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .author-info { flex: 1; min-width: 260px; }
+    .author-name { font-size: 28px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .author-title { font-size: 14px; color: var(--primary); margin-bottom: 16px; }
+    .author-quote {
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.8;
+      border-left: 3px solid var(--primary);
+      padding-left: 16px;
+      margin-bottom: 20px;
+    }
+    .author-links { display: flex; flex-direction: column; gap: 8px; }
+    .author-link { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+    .author-link:hover { color: var(--primary); }
+    .author-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; min-width: 200px; }
+    .author-stat { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; text-align: center; }
+    .author-stat-num { font-size: 28px; font-weight: 700; color: var(--accent); }
+    .author-stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      padding: 80px 40px;
+      background: linear-gradient(135deg, var(--darker), #1e1e4a);
+    }
+    .cta-section h2 { font-size: 40px; font-weight: 700; color: var(--white); margin-bottom: 12px; }
+    .cta-section p { font-size: 16px; color: var(--text-muted); margin-bottom: 32px; }
+
+    /* Footer */
+    footer {
+      background: var(--darker);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 32px 40px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    footer a { color: var(--primary); text-decoration: none; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav { padding: 12px 20px; }
+      nav ul { gap: 16px; }
+      .hero { padding: 60px 20px; }
+      .hero h1 { font-size: 36px; }
+      .section-inner { padding: 50px 20px; }
+      .stats-bar { gap: 30px; padding: 24px 20px; }
+      .author-section { padding: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">📘 Git & GitHub</div>
+    <ul>
+      <li><a href="#chapters">Chapters</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#annexes">Reference</a></li>
+      <li><a href="#author">Author</a></li>
+      <li><a href="https://github.com/MQHassan/git-github-book" target="_blank">GitHub ↗</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-badge">First Edition · August 2026</div>
+    <h1>Git & GitHub<br>From Zero to Professional</h1>
+    <h2>A Complete Hands-On Guide for Everyone</h2>
+    <p class="hero-quote">"Every expert was once a beginner. Every professional was once an amateur."</p>
+    <div class="hero-buttons">
+      <a href="#chapters" class="btn-primary">Start Reading →</a>
+      <a href="https://github.com/MQHassan/git-github-book" target="_blank" class="btn-secondary">View on GitHub</a>
+    </div>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-num">11</div><div class="stat-label">Chapters</div></div>
+    <div class="stat"><div class="stat-num">4</div><div class="stat-label">Reference Annexes</div></div>
+    <div class="stat"><div class="stat-num">8,500+</div><div class="stat-label">Lines of Content</div></div>
+    <div class="stat"><div class="stat-num">40+</div><div class="stat-label">Git Commands</div></div>
+    <div class="stat"><div class="stat-num">25</div><div class="stat-label">Troubleshooting Scenarios</div></div>
+    <div class="stat"><div class="stat-num">60+</div><div class="stat-label">Assessment Questions</div></div>
+  </div>
+
+  <!-- Features -->
+  <div id="features">
+    <div class="section-inner">
+      <div class="section-label">Why this book</div>
+      <div class="section-title">Built Different</div>
+      <div class="section-sub">Written by a medical professional who learned Git from scratch — for everyone who thought Git was only for developers.</div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">Learning Objectives</div>
+          <div class="feature-desc">Every chapter starts with clear objectives so you know exactly what you will be able to do by the end.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💡</div>
+          <div class="feature-title">Plain English Analogies</div>
+          <div class="feature-desc">Every concept explained with real-world analogies — no developer jargon, no assumed knowledge.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⌨️</div>
+          <div class="feature-title">Hands-On Exercises</div>
+          <div class="feature-desc">Real commands you type yourself. Understanding comes from doing — not from reading alone.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✅</div>
+          <div class="feature-title">Assessment & Answers</div>
+          <div class="feature-desc">Every chapter ends with assessment questions and full detailed answers to test your understanding.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔧</div>
+          <div class="feature-title">Troubleshooting Guide</div>
+          <div class="feature-desc">25 common Git problems with exact error messages and step-by-step fixes. Nothing stays broken for long.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Visual Diagrams</div>
+          <div class="feature-desc">ASCII diagrams showing exactly how commits, branches and remotes relate to each other visually.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chapters -->
+  <div id="chapters" class="section-alt">
+    <div class="section-inner">
+      <div class="section-label">Contents</div>
+      <div class="section-title">11 Complete Chapters</div>
+      <div class="section-sub">Click any chapter to read it on GitHub. From absolute beginner to professional.</div>
+      <div class="chapters-grid">
+
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/chapter-01-why-git-exists.md" target="_blank" class="chapter-card">
+          <div class="chapter-num">Chapter 1</div>
+          <div class="chapter-title">Why Git Exists</div>
+          <div class="chapter-desc">The problem Git solves, what version control means, Git vs GitHub and real-world use cases.</div>
+          <span class="level-badge level-beginner">🟢 Beginner</span>
+        </a>
+
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/chapter-02-the-language-of-git.md" target="_blank" class="chapter-card">
+          <div class="chapter-num">Chapter 2</div>
+          <div class="chapter-title">The Language of Git</div>
+          <div class="chapter-desc">40+ terms explained in plain English — repository, commit, branch, HEAD, staging area and more.</div>
+          <span class="level-badge level-beginner">🟢 Beginner</span>
+        </a>
+
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/chapter-03-installation-and-setup.md" target="_blank" class="chapter-card">
+          <div class="chapter-num">Chapter 3</div>
+          <div class="chapter-title">Installation and Setup</div>
+          <div class="chapter-desc">Installing Git on Windows, Mac and Linux. First-time configuration. VS Code setup. Common problems fixed.</div>
+          <span class="level-badge level-beginner">🟢 Beginner</span>
+        </a>
+
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/chapter-04-your-first-repository.md" target="_blank" class="chapter-card">
+          <div class="chapter-num">Chapter 4</div>
+          <div class="chapter-title">Your First Repository</div>
+          <div class="chapter-desc">git init, status, add, diff, commit, log. The three zones explained. Your first real commits.</div>
+          <span class="level-badge level-beginner">🟢 Beginner</span>
+        </a>
+
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/chapter-05-branching.md" target="_blank" class="chapter-card">
+          <div class="chapter-num">Chapter 5</div>
+          <div class="chapter-title">Branching</div>
+          <div class="chapter-desc">What branches really are. Creating, switching, merging. Conflict resolution. Visual diagrams throughout.</div>
+          <span class="level-badge level-intermediate">🟡 Intermediate</span>
+        </a>
+
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/chapter-06-github-and-remotes.md" target="_blank" class="chapter-card">
+          <div class="chapter-num">Chapter 6</div>
+          <div class="chapter-title">GitHub and Remotes</div>
+          <div class="chapter-desc">Connecting to GitHub. Push, pull, fetch, clone. Authentication. The complete remote workflow.</div>
+          <span class="level-badge level-intermediate">🟡 Intermediate</span>
+        </a>
+
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/chapter-07-collaboration-and-pull-requests.md" target="_blank" class="chapter-card">
+          <div class="chapter-num">Chapter 7</div>
+          <div class="chapter-title">Collaboration and Pull Requests</div>
+          <div class="chapter-desc">GitHub Flow. Opening and reviewing PRs. Forking. Open source contribution. Branch protection.</div>
+          <span class="level-badge level-intermediate">🟡 Intermediate</span>
+        </a>
+
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/chapter-08-advanced-git-rescue-commands.md" target="_blank" class="chapter-card">
+          <div class="chapter-num">Chapter 8</div>
+          <div class="chapter-title">Advanced Git — Rescue Commands</div>
+          <div class="chapter-desc">stash, revert, reset, reflog, cherry-pick, bisect, blame, interactive rebase. Nothing stays broken.</div>
+          <span class="level-badge level-advanced">🔴 Advanced</span>
+        </a>
+
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/chapter-09-github-actions-and-cicd.md" target="_blank" class="chapter-card">
+          <div class="chapter-num">Chapter 9</div>
+          <div class="chapter-title">GitHub Actions and CI/CD</div>
+          <div class="chapter-desc">Automated workflows on every push. Testing, building, deploying. Secrets. Multi-job pipelines.</div>
+          <span class="level-badge level-advanced">🔴 Advanced</span>
+        </a>
+
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/chapter-10-real-project-build-and-deploy-website.md" target="_blank" class="chapter-card">
+          <div class="chapter-num">Chapter 10</div>
+          <div class="chapter-title">Real Project — Build a Website</div>
+          <div class="chapter-desc">Build and deploy a live professional website using Git, GitHub Pages and GitHub Actions.</div>
+          <span class="level-badge level-project">🟣 Project</span>
+        </a>
+
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/chapter-11-best-practices.md" target="_blank" class="chapter-card">
+          <div class="chapter-num">Chapter 11</div>
+          <div class="chapter-title">Best Practices</div>
+          <div class="chapter-desc">Commit messages, branching strategies, repo structure, code review, GitHub profile, next steps.</div>
+          <span class="level-badge level-project">🟣 Professional</span>
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Annexes -->
+  <div id="annexes">
+    <div class="section-inner">
+      <div class="section-label">Reference</div>
+      <div class="section-title">4 Complete Annexes</div>
+      <div class="section-sub">Keep these open alongside the book. Return to them again and again.</div>
+      <div class="annex-grid">
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/annex-a-terminal-and-markdown-reference.md" target="_blank" class="annex-card">
+          <div class="annex-letter">A</div>
+          <div class="annex-title">Terminal & Markdown Reference</div>
+          <div class="annex-desc">Every terminal command for Windows, Mac and Linux. Complete Markdown syntax guide.</div>
+        </a>
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/annex-b-git-cheat-sheet.md" target="_blank" class="annex-card">
+          <div class="annex-letter">B</div>
+          <div class="annex-title">Git Cheat Sheet</div>
+          <div class="annex-desc">Every Git command organised by category. Print it and keep it on your desk.</div>
+        </a>
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/annex-c-troubleshooting-guide.md" target="_blank" class="annex-card">
+          <div class="annex-letter">C</div>
+          <div class="annex-title">Troubleshooting Guide</div>
+          <div class="annex-desc">25 common Git problems with exact error messages and step-by-step fixes.</div>
+        </a>
+        <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/annex-d-glossary.md" target="_blank" class="annex-card">
+          <div class="annex-letter">D</div>
+          <div class="annex-title">Complete Glossary</div>
+          <div class="annex-desc">40+ Git and GitHub terms defined alphabetically with cross-references to chapters.</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Author -->
+  <div id="author" class="section-alt">
+    <div class="section-inner">
+      <div class="section-label">About the Author</div>
+      <div class="author-section">
+        <div class="author-info">
+          <div class="author-name">Dr M Quamrul Hassan</div>
+          <div class="author-title">MBBS, FCPS (Paediatrics) · Senior Consultant Paediatrician & Neonatologist · Evercare Hospital Dhaka</div>
+          <div class="author-quote">
+            "I started this journey with zero Git knowledge. The first command I typed returned an error.
+            By the end of that day I had a live website, a GitHub profile, and a complete understanding
+            of everything in this book. If I could do it — so can you."
+          </div>
+          <div class="author-links">
+            <a href="https://mqhassan.github.io" target="_blank" class="author-link">🌐 mqhassan.github.io</a>
+            <a href="https://github.com/MQHassan" target="_blank" class="author-link">💻 github.com/MQHassan</a>
+            <a href="https://github.com/MQHassan/research-portfolio" target="_blank" class="author-link">🔬 Research Portfolio</a>
+            <a href="https://github.com/MQHassan/cv-biodata" target="_blank" class="author-link">📋 CV and Biodata</a>
+          </div>
+        </div>
+        <div class="author-stats">
+          <div class="author-stat"><div class="author-stat-num">32+</div><div class="author-stat-label">Years practising</div></div>
+          <div class="author-stat"><div class="author-stat-num">25</div><div class="author-stat-label">Publications</div></div>
+          <div class="author-stat"><div class="author-stat-num">1</div><div class="author-stat-label">Day to learn Git</div></div>
+          <div class="author-stat"><div class="author-stat-num">1</div><div class="author-stat-label">Book written</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h2>Ready to Begin?</h2>
+    <p>Start with Chapter 1. Open a terminal. Type the commands.<br>Everything else follows naturally.</p>
+    <div class="hero-buttons">
+      <a href="https://github.com/MQHassan/git-github-book/blob/main/chapters/chapter-01-why-git-exists.md" target="_blank" class="btn-primary">Start Chapter 1 →</a>
+      <a href="https://github.com/MQHassan/git-github-book" target="_blank" class="btn-secondary">View Full Book on GitHub</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p><strong>Git & GitHub — From Zero to Professional</strong> · Dr M Quamrul Hassan · First Edition · August 2026</p>
+    <p style="margin-top: 8px;">
+      <a href="https://github.com/MQHassan/git-github-book">github.com/MQHassan/git-github-book</a> ·
+      <a href="https://mqhassan.github.io">mqhassan.github.io</a>
+    </p>
+  </footer>
+
+</body>
+</html>
